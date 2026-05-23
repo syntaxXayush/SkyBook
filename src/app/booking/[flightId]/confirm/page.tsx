@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle, Copy, Plane, Users, CreditCard, Loader2 } from 'lucide-react';
@@ -11,7 +11,7 @@ import { formatPrice, formatTime, formatDate, calculateDuration, getClassLabel }
 import { toast } from 'sonner';
 import type { Booking } from '@/types';
 
-export default function ConfirmationPage() {
+function ConfirmationContent() {
   const searchParams = useSearchParams();
   const pnr = searchParams.get('pnr') || '';
   const bookingId = searchParams.get('bookingId') || '';
@@ -181,5 +181,17 @@ export default function ConfirmationPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-grid bg-radial-glow">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+      </div>
+    }>
+      <ConfirmationContent />
+    </Suspense>
   );
 }
